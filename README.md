@@ -7,7 +7,7 @@
 * **Strategy Pattern** - Implemented notification service with different notification strategies (Email and SMS)
 * **Factory Pattern** - Implemented a payment processing system using a Factory to separate object creation from client usage
 * **Observer Pattern** - Implemented stock price alerts and an order tracking/notification system using Subjects and Observers
-* **Decorator Pattern** - Implemented a coffee/beverage customization system using composition, decorators, and dynamic chaining
+* **Decorator Pattern** - Implemented an API Request Processing Pipeline using decorators to dynamically compose request-processing behaviors
 
 ### Current Understanding
 
@@ -52,60 +52,47 @@
 * Understand that a decorator wraps another component while preserving the common interface.
 * Understand chaining multiple decorators around a component.
 * Understand composition over inheritance for dynamically combining responsibilities.
-* Completed the Coffee / Beverage Customization interview-style problem.
+* Implemented the API Request Processing Pipeline problem.
+* Understand decorators for Authentication, Rate Limiting, Caching, Logging, and Metrics.
+* Understand that different decorators can have different failure policies.
+* Understand that a decorator can either stop the pipeline or delegate to the wrapped handler depending on its responsibility.
+* Completed the current interview-style practice.
 * Decorator is considered complete for the current study level.
 
 ### Next
 
 * **Adapter Pattern** - Learn how to make incompatible interfaces work together through an adapter.
-* **State Pattern** - Learn how an object's behavior can change based on its internal state.
 
-## Completed Practice Problems
+## Adapter Pattern — What to Study
 
-### Decorator — Coffee / Beverage Customization
+* Understand the core problem Adapter solves: making an existing implementation with an incompatible interface work with the interface expected by the Client.
+* Understand the four core roles:
+  * Client
+  * Target
+  * Adapter
+  * Adaptee
+* Understand interface translation.
+* Understand how an Adapter wraps an existing implementation.
+* Understand composition-based Adapter.
+* Understand how the Adapter translates calls from the Target interface into calls understood by the Adaptee.
+* Understand the difference between Adapter and Decorator.
+* Understand the difference between Adapter and Facade.
+* Understand composition-based Adapter vs inheritance-based Adapter.
+* Understand when Adapter should be used.
+* Understand when Adapter is unnecessary.
 
-Implemented a beverage ordering system where customers can dynamically combine beverages with condiments such as:
+### Adapter Completion Criteria
 
-* Milk
-* Sugar
-* Caramel
-* Whipped Cream
-* Chocolate
+Consider Adapter complete once you can:
 
-The design avoids creating a separate subclass for every possible beverage/condiment combination.
-
-Focus areas completed:
-
-* Component interface
-* Concrete components
-* Decorator abstraction
-* Concrete decorators
-* Chaining decorators
-* Composition over inheritance
-
-### Completed Status
-
-Decorator is complete for the current study level.
-
----
-
-## Current Practice Problem
-
-### Adapter — Payment Gateway Integration
-
-Design a payment system where the application expects a common `PaymentGateway` interface, but multiple third-party payment providers expose incompatible APIs.
-
-The system should integrate those providers through Adapters without modifying the third-party classes.
-
-Focus on:
-
-* Target interface
-* Adaptee
-* Adapter
-* Client
-* Interface translation
-* Decoupling application code from third-party APIs
-* Understanding Adapter vs Decorator
+* Explain the problem it solves.
+* Identify Client, Target, Adapter, and Adaptee.
+* Implement an Adapter independently.
+* Explain interface translation clearly.
+* Explain composition-based Adapter.
+* Distinguish Adapter from Decorator.
+* Distinguish Adapter from Facade.
+* Explain when Adapter is unnecessary.
 
 ## Study Approach
 
