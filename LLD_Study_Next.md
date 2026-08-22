@@ -7,6 +7,7 @@
 * Strategy Pattern — completed for Level 1/2 questions
 * Factory Pattern — completed at the basic/interview-practice level
 * Observer Pattern — completed for Level 1/2 questions
+* Decorator Pattern — completed for the current LLD study level
 
 ### Factory Pattern — What Was Practiced
 
@@ -114,168 +115,56 @@ Do not spend time learning every advanced variation yet. Move forward and return
 
 ---
 
-# Next Pattern: Decorator Pattern
+# Decorator Pattern — Completed
 
-## What to Study
+## What Was Practiced
 
-### 1. The problem Decorator solves
+Implemented the **Coffee / Beverage Customization System** using the Decorator Pattern.
 
-Understand how to add responsibilities or behavior to an object dynamically without modifying its original class.
+The problem focused on dynamically combining a base beverage with multiple condiments without creating a separate subclass for every possible combination.
 
-### 2. Composition over inheritance
+The core concepts covered were:
 
-Understand why repeatedly creating subclasses for every combination of features can become problematic.
+* Component interface
+* Concrete components
+* Decorator abstraction
+* Concrete decorators
+* Chaining decorators
+* Composition over inheritance
 
-For example:
+### Key Understanding
 
-```text
-Coffee
-Coffee + Milk
-Coffee + Sugar
-Coffee + Milk + Sugar
-Coffee + Milk + Caramel
-Coffee + Sugar + Caramel
-...
-```
+Decorator allows additional responsibilities to be attached to an object dynamically by wrapping it with another object that follows the same interface.
 
-Decorator allows these combinations to be composed dynamically.
-
-### 3. Component / Decorator relationship
-
-Understand the common interface shared by:
-
-* the original component
-* concrete decorators
-
-A decorator wraps another component and delegates to it while adding its own behavior.
-
-### 4. Chaining Decorators
-
-Understand how multiple decorators can wrap one another:
+Conceptually:
 
 ```text
-Caramel
-   ↓
-Milk
-   ↓
-Coffee
+WhippedCream
+      ↓
+  Caramel
+      ↓
+    Milk
+      ↓
+  Espresso
 ```
 
-The resulting object behaves as one component while accumulating behavior.
+The final decorated object can still be treated as the original component type.
 
-### 5. Decorator vs Inheritance
+### Decorator vs Inheritance
 
-Understand when composition through decorators is preferable to creating many subclasses.
+The important design tradeoff is:
+
+> **Use composition to build combinations dynamically instead of creating a subclass for every possible combination of features.**
+
+### Decorator Completion
+
+Decorator is considered complete for the current LLD study level.
+
+Do not spend time learning every advanced variation yet. Return to Decorator later when solving multi-pattern system designs.
 
 ---
 
-## Decorator Interview Problem
-
-### Coffee / Beverage Customization System
-
-Design and implement a beverage ordering system using the **Decorator Pattern**.
-
-The system should support different base beverages:
-
-* Espresso
-* Cappuccino
-* Latte
-* Tea
-
-Every beverage has:
-
-* a description
-* a base price
-
-Customers can dynamically add condiments/toppings:
-
-* Milk
-* Sugar
-* Caramel
-* Whipped Cream
-* Chocolate
-
-Each condiment should modify the beverage's description and price.
-
-For example:
-
-```text
-Espresso
-    $100
-
-Espresso + Milk
-    $120
-
-Espresso + Milk + Caramel
-    $150
-
-Espresso + Milk + Caramel + Whipped Cream
-    $180
-```
-
-### Requirements
-
-1. A beverage should expose:
-
-   * `get_description()`
-   * `get_cost()`
-
-2. New beverages should be addable without modifying existing beverage classes.
-
-3. New condiments should be addable without modifying existing beverage classes.
-
-4. A customer should be able to combine condiments dynamically.
-
-5. Avoid creating a separate class for every possible combination.
-
-For example, do **not** create:
-
-```text
-EspressoWithMilk
-EspressoWithMilkAndCaramel
-EspressoWithMilkCaramelAndCream
-...
-```
-
-6. The final decorated beverage should behave like a normal beverage.
-
-### Example
-
-The client should be able to construct something conceptually equivalent to:
-
-```text
-WhippedCream(
-    Caramel(
-        Milk(
-            Espresso()
-        )
-    )
-)
-```
-
-and obtain:
-
-```text
-Description:
-Espresso, Milk, Caramel, Whipped Cream
-
-Cost:
-$180
-```
-
-### Bonus Questions
-
-After the implementation, consider:
-
-* Why is Decorator preferable to inheritance here?
-* What happens if the customer adds the same condiment twice?
-* Can decorators be applied in any order?
-* What happens if a decorator needs additional configuration?
-* How does Decorator differ from Strategy?
-
----
-
-# Next Pattern After Decorator: Adapter Pattern
+# Next Pattern: Adapter Pattern
 
 ## What to Study
 
@@ -443,8 +332,8 @@ Continue roughly in this order:
 3. Strategy
 4. Factory
 5. Observer
-6. **Decorator ← NEXT**
-7. **Adapter**
+6. Decorator
+7. **Adapter ← NEXT**
 8. State
 9. Command
 10. Composite

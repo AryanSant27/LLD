@@ -1,0 +1,6 @@
+{
+    "12345": {
+        "request": "GET /api/data",
+        "response": "{'data': 'sample data'}"
+    }
+}
