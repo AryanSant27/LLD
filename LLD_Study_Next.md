@@ -119,18 +119,26 @@ Do not spend time learning every advanced variation yet. Move forward and return
 
 ## What Was Practiced
 
-Implemented the **Coffee / Beverage Customization System** using the Decorator Pattern.
+Implemented an **API Request Processing Pipeline** using the Decorator Pattern.
 
-The problem focused on dynamically combining a base beverage with multiple condiments without creating a separate subclass for every possible combination.
+The problem involved a backend API gateway where every incoming API request can pass through a configurable set of behaviors:
 
-The core concepts covered were:
+* Authentication
+* Rate Limiting
+* Caching
+* Logging
+* Metrics
 
-* Component interface
-* Concrete components
-* Decorator abstraction
-* Concrete decorators
-* Chaining decorators
-* Composition over inheritance
+The objective was to dynamically compose these behaviors around a base request handler without modifying the original handler.
+
+The base abstraction was:
+
+```python
+class RequestHandler:
+
+    def handle_request(self, request):
+        pass
+```
 
 ### Key Understanding
 
@@ -139,22 +147,39 @@ Decorator allows additional responsibilities to be attached to an object dynamic
 Conceptually:
 
 ```text
-WhippedCream
-      ↓
-  Caramel
-      ↓
-    Milk
-      ↓
-  Espresso
+Metrics
+   ↓
+Logging
+   ↓
+Caching
+   ↓
+RateLimiting
+   ↓
+Authentication
+   ↓
+BaseRequestHandler
 ```
 
-The final decorated object can still be treated as the original component type.
+Each decorator can perform its own responsibility and delegate to the wrapped handler.
 
-### Decorator vs Inheritance
+### Composition Over Inheritance
 
-The important design tradeoff is:
+The important design idea is:
 
-> **Use composition to build combinations dynamically instead of creating a subclass for every possible combination of features.**
+> **Use composition to dynamically build a processing pipeline instead of modifying the original handler or creating subclasses for every possible combination of behaviors.**
+
+### Decorator Failure Policies
+
+A key part of the problem was understanding that decorators do not necessarily have identical failure behavior.
+
+For example:
+
+* Authentication failure may need to stop the entire pipeline.
+* Rate limiting failure may reject the request immediately.
+* Logging may record the request and still allow processing to continue.
+* Metrics may observe the request regardless of whether downstream processing succeeds.
+
+Therefore, the decorator chain is not simply about "adding functionality." Each decorator can define how its responsibility interacts with the downstream handler.
 
 ### Decorator Completion
 
@@ -168,13 +193,17 @@ Do not spend time learning every advanced variation yet. Return to Decorator lat
 
 ## What to Study
 
-### 1. The problem Adapter solves
+### 1. The Problem Adapter Solves
 
 Understand how to make two incompatible interfaces work together without modifying the existing classes.
 
+The key problem is:
+
+> **The existing class provides the functionality we need, but through an interface that our client does not understand.**
+
 ### 2. Client / Target / Adapter / Adaptee
 
-Understand the roles:
+Understand the four core roles:
 
 ```text
 Client
@@ -186,130 +215,129 @@ Adapter
 Adaptee
 ```
 
-### 3. Interface incompatibility
+* **Client** → the code that expects a particular interface.
+* **Target** → the interface the Client understands and works with.
+* **Adapter** → translates the Target interface into calls understood by the Adaptee.
+* **Adaptee** → the existing class with the incompatible interface.
 
-The core problem is not that an existing class has bad behavior.
+### 3. Interface Translation
 
-The problem is:
+Understand that Adapter is primarily about **interface translation**.
 
-> **The existing class provides the functionality we need, but through an interface that our client does not understand.**
+The Adapter receives a call expressed through the Target interface and translates it into the corresponding operation on the Adaptee.
 
-### 4. Wrapping an existing implementation
+Conceptually:
 
-Understand how an Adapter translates one interface into another.
+```text
+Client
+   |
+   | target_method()
+   ↓
+Adapter
+   |
+   | adaptee_method()
+   ↓
+Adaptee
+```
 
-### 5. Adapter vs Decorator
+### 4. Wrapping Existing Implementations
+
+Understand how an Adapter can wrap an existing object rather than modifying it.
+
+The existing implementation remains unchanged while the Adapter makes it compatible with the interface expected by the Client.
+
+### 5. Composition-Based Adapter
+
+Understand the common object-composition approach:
+
+```text
+Adapter
+   |
+   └── Adaptee
+```
+
+The Adapter holds a reference to the Adaptee and delegates translated operations to it.
+
+### 6. Adapter vs Decorator
+
+Understand the fundamental distinction:
+
+* **Decorator** → adds behavior/responsibility while preserving the interface.
+* **Adapter** → changes/translates the interface so incompatible objects can work together.
+
+Decorator:
+
+```text
+Client
+  ↓
+Common Interface
+  ↓
+Decorator
+  ↓
+Same Interface
+  ↓
+Component
+```
+
+Adapter:
+
+```text
+Client
+  ↓
+Target Interface
+  ↓
+Adapter
+  ↓
+Different Interface
+  ↓
+Adaptee
+```
+
+### 7. Adapter vs Facade
 
 Understand the difference:
 
-* **Decorator** → adds behavior/responsibility while preserving the interface.
-* **Adapter** → translates one interface into another.
+* **Adapter** → makes one existing interface compatible with another expected interface.
+* **Facade** → provides a simpler interface over a complex subsystem.
+
+### 8. Adapter vs Inheritance
+
+Understand that Adapter can be implemented through:
+
+* Object composition
+* Inheritance / class adaptation
+
+Know why composition is generally the more flexible approach when adapting existing objects.
+
+### 9. When to Use Adapter
+
+Be able to identify Adapter when:
+
+* You have an existing class that already provides the required functionality.
+* Its interface does not match the interface your application expects.
+* You cannot or do not want to modify the existing class.
+* You want the rest of the application to remain independent of the incompatible implementation.
+
+### 10. When Adapter Is Not Needed
+
+Understand that Adapter is unnecessary when the existing class already implements the interface expected by the Client.
+
+Do not introduce an Adapter merely for the sake of using the pattern.
 
 ---
 
-## Adapter Interview Problem
+## Adapter Completion Criteria
 
-### Payment Gateway Integration System
+Consider Adapter complete once you can:
 
-You are building an e-commerce payment system.
-
-Your application expects every payment provider to implement:
-
-```text
-PaymentGateway
-    pay(amount)
-    refund(transaction_id)
-```
-
-Your application already has its own implementation:
-
-```text
-InternalPaymentGateway
-```
-
-However, the company wants to integrate several external payment providers.
-
-The external providers have incompatible APIs.
-
-### Provider 1 — Stripe-like Gateway
-
-```text
-create_payment(amount)
-cancel_payment(transaction_id)
-```
-
-### Provider 2 — PayPal-like Gateway
-
-```text
-make_transaction(amount)
-reverse_transaction(transaction_id)
-```
-
-### Provider 3 — Legacy Gateway
-
-```text
-process(amount_in_rupees)
-void(transaction_reference)
-```
-
-You **cannot modify the existing third-party classes**.
-
-The rest of your application should continue working with:
-
-```text
-PaymentGateway
-```
-
-### Requirements
-
-1. Define a common `PaymentGateway` interface.
-
-2. Existing application code should depend only on `PaymentGateway`.
-
-3. Integrate all three external gateways.
-
-4. Do not modify the external gateway classes.
-
-5. The application should be able to switch between payment providers without changing its core payment-processing logic.
-
-6. Adding another external payment provider should require adding an Adapter rather than modifying the existing application logic.
-
-### Example
-
-The client should be able to work with:
-
-```text
-PaymentGateway
-      ↑
-      |
-StripeAdapter
-      ↓
-StripeAPI
-```
-
-and:
-
-```text
-PaymentGateway
-      ↑
-      |
-PayPalAdapter
-      ↓
-PayPalAPI
-```
-
-The client should not need to know which external API is being used.
-
-### Bonus Questions
-
-After implementing the basic system, consider:
-
-* Why can't we simply modify the third-party classes?
-* Why is Adapter preferable to changing every client?
-* Is Adapter adding behavior or translating behavior?
-* When would inheritance-based Adapter be appropriate?
-* What is the difference between Adapter and Facade?
-* What is the difference between Adapter and Decorator?
+* Explain the problem it solves.
+* Identify Client, Target, Adapter, and Adaptee.
+* Implement an Adapter independently.
+* Explain interface translation clearly.
+* Explain composition-based Adapter.
+* Distinguish Adapter from Decorator.
+* Distinguish Adapter from Facade.
+* Explain when Adapter is unnecessary.
 
 ---
 
